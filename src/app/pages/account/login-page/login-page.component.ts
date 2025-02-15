@@ -15,7 +15,7 @@ export class LoginPageComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       username: ['', Validators.compose([
-        Validators.minLength(14),
+        Validators.minLength(11),
         Validators.maxLength(14),
         Validators.required
       ])],
@@ -28,6 +28,31 @@ export class LoginPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    const token = localStorage.getItem('petshop.token');
+    if (token){
+      console.log('Autenticando...')
+      this
+      .service
+      .refreshToken()
+      .subscribe(
+        (data : any) => {
+          localStorage.setItem('petshop.token', data.token)
+        },
+        (err) => {
+          localStorage.clear();
+        }
+      )
+    }
   }
 
+  submit(){
+    this.service.authenticate(this.form.value)
+    .subscribe((data: any)=> {
+      localStorage.setItem('petshop.token', data.token)
+    },
+    (err) => {
+      console.log(err);
+    }
+  )
+  }
 }
