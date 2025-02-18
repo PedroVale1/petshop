@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataService } from 'src/app/services/data.service';
+import { CustomValidator } from 'src/app/validators/custom.validator';
 
 @Component({
   selector: 'app-login-page',
@@ -16,9 +17,10 @@ export class LoginPageComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       username: ['', Validators.compose([
-        Validators.minLength(11),
+        Validators.minLength(14),
         Validators.maxLength(14),
-        Validators.required
+        Validators.required,
+        CustomValidator.isCpf()
       ])],
       password: ['', Validators.compose([
         Validators.minLength(6),
